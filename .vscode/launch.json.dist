@@ -1,0 +1,78 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Program",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "remotePath": "",
+            "port": 2346,
+            "host": "127.0.0.1",
+            "program": "${workspaceRoot}",
+            "env": {
+                "HOST":"localhost:8069",
+                "MONGO_HOST":"mongodb://localhost:27017",
+                "MONGO_DATABASE":"products",
+                "GROUP_ID":"1",
+                "TOPICS_SUBSCRIBED":"products",
+                "BOOTSTRAP_SERVERS":"localhost:9092",
+                "REQUEST_TIMEOUT":"1000",
+                "RETRIES":"5",
+                "BATCH_SIZE":"16384",
+                "LINGER":"1",
+                "BUFFER_MEMORY":"33554432",
+                "AUTO_COMMIT_INTERVAL":"5000",
+                "AUTO_COMMIT_ENABLE":"true",
+                "AUTO_OFFSET_RESET":"earliest"
+            },
+            "args": [],
+            "showLog": true
+        },
+        {
+            "name": "Launch Tests",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "remotePath": "",
+            "port": 2346,
+            "host": "127.0.0.1",
+            "program": "${workspaceRoot}/controllers/v1",
+            "env": {
+                "HOST":"localhost:8069",
+                "MONGO_HOST":"mongodb://localhost:27017",
+                "MONGO_DATABASE":"products",
+                "GROUP_ID":"1",
+                "TOPICS_SUBSCRIBED":"products",
+                "BOOTSTRAP_SERVERS":"localhost:9092",
+                "REQUEST_TIMEOUT":"1000",
+                "RETRIES":"5",
+                "BATCH_SIZE":"16384",
+                "LINGER":"1",
+                "BUFFER_MEMORY":"33554432",
+                "AUTO_COMMIT_INTERVAL":"5000",
+                "AUTO_COMMIT_ENABLE":"true",
+                "AUTO_OFFSET_RESET":"earliest"
+            },
+            "args": [
+              "-test.v"
+            ]
+        }
+    ]
+}
+
+
+"HOST":"localhost:8069"
+"MONGO_HOST":"mongodb://localhost:27017"
+"MONGO_DATABASE":"products"
+"GROUP_ID":"1"
+"TOPICS_SUBSCRIBED":"products"
+"BOOTSTRAP_SERVERS":"localhost:9092"
+"REQUEST_TIMEOUT":"1000"
+"RETRIES":"5"
+"BATCH_SIZE":"16384"
+"LINGER":"1"
+"BUFFER_MEMORY":"33554432"
+"AUTO_COMMIT_INTERVAL":"5000"
+"AUTO_COMMIT_ENABLE":"true"
+"AUTO_OFFSET_RESET":"earliest"

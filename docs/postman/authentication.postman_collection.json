@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "fcbf4d58-bbe8-4cab-aa0d-0a7a956744b9",
+		"name": "authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"myusername\",\n\t\"email\":\"myemail@email.com\",\n\t\"password\":\"mypassword\"\n}"
+				},
+				"url": {
+					"raw": "{{authentication_host}}/api/v1/user",
+					"host": [
+						"{{authentication_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"myusername\",\n\t\"password\":\"mypssword\"\n}"
+				},
+				"url": {
+					"raw": "{{authentication_host}}/api/v1/user/jwt",
+					"host": [
+						"{{authentication_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"jwt"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

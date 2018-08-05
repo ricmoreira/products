@@ -1,0 +1,73 @@
+# Group users
+
+# Create user [/api/v1/user]
+
+## Create User [POST]
+
+Creates an user
+
++   Request Create User (application/json)
+
+	+   Body
+
+            {
+                "username": "admin_username",
+                "email": "admin_username@email.com",
+                "password": "admin_password",
+                "roles": [
+                    { 
+                        "role": "ADMIN",
+                        "level": "1"
+                    }
+                ]
+            }
+
++   Response 200 (application/json)
+
+            {
+                "id": "5b5c6b50951e7363f376d5e0",
+                "username": "admin_username",
+                "email": "admin_username@email.com",
+                "roles": [
+                    { 
+                        "role": "ADMIN",
+                        "level": "1"
+                    }
+                ]
+            }
+
++   Response 400 (application/json)
+
+            {
+                "code": "INVALID_REQUEST",
+                "response": "E11000 duplicate key error collection: auth.users index: username dup key: { : \"admin_username\" }"
+            }
+
+
+# Login user [/api/v1/user/jwt]
+
+## Login User [POST]
+
+Logs in an user
+
++   Request Login User (application/json)
+
+	+   Body
+
+            {
+                "username": "admin_username",
+                "password": "admin_password"
+            }
+
++   Response 200 (application/json)
+
+            {
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im15dXNlcm5hbWUiLCJyb2xlcyI6W10sImF1ZCI6ImVjb21tZXJjZV9hZG1pbiIsImV4cCI6MTUzMjc4NzY1NCwiaWF0IjoxNTMyNzg0MDU0LCJpc3MiOiJhdXRoZW50aWNhdGlvbiJ9.ndYVQXfUHvu2LdE34OvdaUQKbrqpXo2pwu0AbT0iToA"
+            }
+
++   Response 401 (application/json)
+
+            {
+                "code": "UNAUTHORIZED",
+                "response": "crypto/bcrypt: hashedPassword is not the hash of the given password"
+            }

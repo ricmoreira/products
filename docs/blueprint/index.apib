@@ -1,0 +1,18 @@
+FORMAT: 1A
+
+# products REST API Documentation
+
+## Description
+manages users and provides JWT tokens to valid products requests using a MongoDB as persistence layer
+
+## Error Codes
+
+HTTP Status Code | Code | Response                        
+---------:| ------------|-----------------------------------
+500 | SERVICE_UNAVAILABLE | The service is currently unavailable
+500 | UNKNOWN_ERROR | Unknown server error
+409 | DUPLICATED_ENTITY | Entity already exists
+400 | INVALID_REQUEST | Invalid request provided
+
+<!-- include(users.apib) -->
+<!-- include(roles.apib) -->
