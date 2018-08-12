@@ -43,3 +43,29 @@ func (pc ProductController) CreateAction(c *gin.Context) {
 
 	c.JSON(200, pRes)
 }
+
+// ListAction list products
+func (pc ProductController) ListAction(c *gin.Context) {
+	validSorts := map[string]string{}
+	validSorts["ProductNumberCode"]="ProductNumberCode"
+	validSorts["ProductCode"]="ProductCode"
+	validSorts["ProductDescription"]="ProductDescription"
+	validSorts["_id"]="_id"
+
+	validFilters := map[string]string{}
+	validFilters["ProductNumberCode"]="ProductNumberCode"
+	validFilters["ProductCode"]="ProductCode"
+	validFilters["ProductDescription"]="ProductDescription"
+	validFilters["_id"]="_id"
+
+	req := mrequest.NewListRequest(c.Request.URL.Query(), validSorts, validFilters)
+
+	res, err := pc.ProductService.List(req)
+
+	if err != nil {
+		c.JSON(err.HttpCode, err)
+		return
+	}
+
+	c.JSON(200, res)
+}

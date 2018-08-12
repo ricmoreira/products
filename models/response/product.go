@@ -24,11 +24,19 @@ type ProductCreate struct {
 }
 
 type ProductRead struct {
-	ID                 string          `json:"id,omitempty"`
-	ProductType        string          `json:"ProductType,omitempty" bson:"ProductType"`
-	ProductCode        string          `json:"ProductCode,omitempty" bson:"ProductCode"`
-	ProductGroup       string          `json:"ProductGroup,omitempty" bson:"ProductGroup,omitempty"`
-	ProductDescription string          `json:"ProductDescription,omitempty" bson:"ProductDescription"`
-	ProductNumberCode  string          `json:"ProductNumberCode,omitempty" bson:"ProductNumberCode"`
-	CustomsDetails     *CustomsDetails `json:"CustomsDetails,omitempty" bson:"CustomsDetails,omitempty"`
+	ID                 string            `json:"id,omitempty"`
+	IDdb               objectid.ObjectID `json:"-" bson:"_id"`
+	ProductType        string            `json:"ProductType,omitempty" bson:"ProductType"`
+	ProductCode        string            `json:"ProductCode,omitempty" bson:"ProductCode"`
+	ProductGroup       string            `json:"ProductGroup,omitempty" bson:"ProductGroup,omitempty"`
+	ProductDescription string            `json:"ProductDescription,omitempty" bson:"ProductDescription"`
+	ProductNumberCode  string            `json:"ProductNumberCode,omitempty" bson:"ProductNumberCode"`
+	CustomsDetails     *CustomsDetails   `json:"CustomsDetails,omitempty" bson:"CustomsDetails,omitempty"`
+}
+
+type ProductList struct {
+	Total    int64           `json:"total"`
+	PerPage  int64           `json:"per_page"`
+	Page     int64           `json:"page"`
+	Products *[]*ProductRead `json:"products"`
 }

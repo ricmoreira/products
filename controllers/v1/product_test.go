@@ -54,6 +54,11 @@ func (ps *MockProductService) CreateMany(*[]*mrequest.ProductCreate) (*[]*mrespo
 	// TODO: implement in the future
 	return nil, nil
 }
+
+func (ps *MockProductService) List(*mrequest.ListRequest) (*mresponse.ProductList, *mresponse.ErrorResponse) {
+	// TODO: implement in the future
+	return nil, nil
+}
 func TestCreateProductAction(t *testing.T) {
 
 	// Mock the server

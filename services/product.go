@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"fmt"
 	"products/models/request"
 	"products/models/response"
@@ -18,6 +19,7 @@ type ProductServiceContract interface {
 	UpdateOne(*mrequest.ProductUpdate) (*mresponse.Product, *mresponse.ErrorResponse)
 	DeleteOne(*mrequest.ProductDelete) (*mresponse.Product, *mresponse.ErrorResponse)
 	CreateMany(*[]*mrequest.ProductCreate) (*[]*mresponse.ProductCreate, *mresponse.ErrorResponse)
+	List(request *mrequest.ListRequest) (*mresponse.ProductList, *mresponse.ErrorResponse)
 }
 
 // ProductService is the layer between http client and repository for product resource
@@ -93,4 +95,37 @@ func (this *ProductService) CreateMany(request *[]*mrequest.ProductCreate) (*[]*
 	}
 
 	return &result, nil
+}
+
+// List returns a list of products with pagination and filtering options
+func (this *ProductService) List(request *mrequest.ListRequest) (*mresponse.ProductList, *mresponse.ErrorResponse) {
+
+	total, perPage, page, cursor, err := this.productRepository.List(request)
+
+	if err != nil {
+		e := errors.HandleErrorResponse(errors.SERVICE_UNAVAILABLE, nil, err.Error())
+		return nil, e
+	}
+
+	docs := []*mresponse.ProductRead{}
+
+	for cursor.Next(context.Background()) {
+		doc := mresponse.ProductRead{}
+		if err := cursor.Decode(&doc); err != nil {
+			errR := errors.HandleErrorResponse(errors.SERVICE_UNAVAILABLE, nil, err.Error())
+			return nil, errR
+		}
+
+		doc.ID = doc.IDdb.Hex()
+
+		docs = append(docs, &doc)
+	}
+	
+	resp := mresponse.ProductList{
+		Total: total,
+		PerPage: perPage,
+		Page: page,
+		Products: &docs,
+	}
+	return &resp, nil
 }

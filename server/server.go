@@ -48,6 +48,9 @@ func (s *Server) Run() {
 	{
 		// Create a new product
 		productApi.POST("", s.productController.CreateAction)
+
+		// List products with filtering and pagination
+		productApi.GET("", s.productController.ListAction)
 	}
 
 	// Fire up the server
