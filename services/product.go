@@ -125,7 +125,7 @@ func (this *ProductService) List(request *mrequest.ListRequest) (*mresponse.Prod
 		Total: total,
 		PerPage: perPage,
 		Page: page,
-		Products: &docs,
+		Items: &docs,
 	}
 	return &resp, nil
 }

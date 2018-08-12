@@ -35,8 +35,8 @@ type ProductRead struct {
 }
 
 type ProductList struct {
-	Total    int64           `json:"total"`
-	PerPage  int64           `json:"per_page"`
-	Page     int64           `json:"page"`
-	Products *[]*ProductRead `json:"products"`
+	Total   int64           `json:"total"`
+	PerPage int64           `json:"per_page"`
+	Page    int64           `json:"page"`
+	Items   *[]*ProductRead `json:"items"`
 }
