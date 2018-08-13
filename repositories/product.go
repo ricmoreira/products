@@ -81,12 +81,21 @@ func (this *ProductRepository) List(req *mrequest.ListRequest) (int64, int64, in
 		bson.NewDocument(args...),
 	)
 
+	sorting := map[string]int{}
+	var sortingValue int
+	if req.Order == "reverse" {
+		sortingValue = -1
+	} else {
+		sortingValue = 1
+	}
+	sorting[req.Sort] = sortingValue
+
 	perPage := int64(req.PerPage)
 	page := int64(req.Page)
 	cursor, e := this.products.Find(
 		context.Background(),
 		bson.NewDocument(args...),
-		findopt.Sort(req.Sort),
+		findopt.Sort(sorting),
 		findopt.Skip(int64(req.PerPage*(req.Page-1))),
 		findopt.Limit(perPage),
 	)

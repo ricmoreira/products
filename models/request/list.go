@@ -8,7 +8,8 @@ import (
 type ListRequest struct {
 	PerPage int                    `json:"per_page" valid:"required"`
 	Page    int                    `json:"page" valid:"required"`
-	Sort    map[string]interface{} `json:"sort" valid:"required in(id)"`
+	Sort    string                 `json:"sort" valid:"required in(id|_id)"`
+	Order   string                 `json:"order" valid:"required in(normal|reverse)"`
 	Filters map[string]interface{} `json:"filters" valid:""`
 }
 
@@ -21,35 +22,41 @@ func NewListRequest(params url.Values, allowedSorts map[string]string, allowedFi
 
 	var req ListRequest
 
-	
+	// set sort
+	if sort := params.Get("sort"); sort != "" {
+		req.Sort = sort
+	} else {
+		req.Sort = "id"
+	}
+
+	// set order
+	if order := params.Get("order"); order != "" {
+		req.Order = order
+	} else {
+		req.Order = "normal"
+	}
+
+	// set per_page
 	if ok := params.Get("per_page"); ok != "" {
 		req.PerPage, _ = strconv.Atoi(params.Get("per_page"))
 	}
-	if ok := params.Get("page"); ok != "" {
-		req.Page, _ = strconv.Atoi(params.Get("page"))
-	}
-
-	req.Filters = make(map[string]interface{})
-	for _, filter := range allowedFilters {
-		if val, ok := params[filter]; ok {
-			req.Filters[filter] = val[0]
-		}
-	}
-
-	// set default values
-	if req.Page <= 0 {
-		req.Page = 1
-	}
-
 	if req.PerPage <= 0 {
 		req.PerPage = 20
 	}
 
-	req.Sort = make(map[string]interface{})
-	if _, ok := allowedSorts[params.Get("sort")]; ok {
-		req.Sort[allowedSorts[params.Get("sort")]] = 1
-		if _, ok := allowedOrders[params.Get("order")]; ok && params.Get("order") == "reverse" {
-			req.Sort[allowedSorts[params.Get("sort")]] = -1
+	// set page
+	if ok := params.Get("page"); ok != "" {
+		req.Page, _ = strconv.Atoi(params.Get("page"))
+	}
+	if req.Page <= 0 {
+		req.Page = 1
+	}
+
+	// set filter
+	req.Filters = make(map[string]interface{})
+	for _, filter := range allowedFilters {
+		if val, ok := params[filter]; ok {
+			req.Filters[filter] = val[0]
 		}
 	}
 
