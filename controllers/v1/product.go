@@ -58,7 +58,8 @@ func (pc ProductController) ListAction(c *gin.Context) {
 	validFilters["ProductDescription"]="ProductDescription"
 	validFilters["_id"]="_id"
 
-	req := mrequest.NewListRequest(c.Request.URL.Query(), validSorts, validFilters)
+	qValues := c.Request.URL.Query()
+	req := mrequest.NewListRequest(qValues, validSorts, validFilters)
 
 	res, err := pc.ProductService.List(req)
 

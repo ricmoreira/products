@@ -21,10 +21,11 @@ func NewListRequest(params url.Values, allowedSorts map[string]string, allowedFi
 
 	var req ListRequest
 
-	if _, ok := params["per_page"]; ok {
+	
+	if ok := params.Get("per_page"); ok != "" {
 		req.PerPage, _ = strconv.Atoi(params.Get("per_page"))
 	}
-	if _, ok := params["page"]; ok {
+	if ok := params.Get("page"); ok != "" {
 		req.Page, _ = strconv.Atoi(params.Get("page"))
 	}
 
