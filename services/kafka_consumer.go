@@ -1,8 +1,8 @@
 package services
 
 import (
+	"log"
 	"encoding/json"
-	"fmt"
 	"products/config"
 	"products/models/request"
 
@@ -23,7 +23,7 @@ func NewKafkaConsumer(config *config.Config, ps *ProductService) *KafkaConsumer 
 
 func (kc *KafkaConsumer) Run() {
 
-	fmt.Println("Start receiving from Kafka")
+	log.Println("Start receiving from Kafka")
 
 	configConsumer := kafka.ConfigMap{
 		"bootstrap.servers":       kc.config.BootstrapServers,
@@ -55,22 +55,23 @@ func (kc *KafkaConsumer) Run() {
 
 			switch topic {
 			case "products":
+				log.Println("Reading a products message")
 				products, err := kc.parseProductsMessage(msg.Value)
 				if err != nil {
-					fmt.Printf("Error parsing event message value. Message %v \n Error: %s\n", msg.Value, err.Error())
+					log.Printf("Error parsing event message value. Message %v \n Error: %s\n", msg.Value, err.Error())
 					break
 				}
 
 				// save products to database
 				_, e := kc.productServ.CreateMany(products)
 				if e != nil {
-					fmt.Printf("Error saving products to database\n Error: %s\n", e.Response)
+					log.Printf("Error saving products to database\n Error: %s\n", e.Response)
 					break
 				}
 			default: //ignore any other topics
 			}
 		} else {
-			fmt.Printf("Consumer error: %v (%v)\n", err, msg)
+			log.Printf("Consumer error: %v (%v)\n", err, msg)
 		}
 	}
 

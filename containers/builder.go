@@ -1,4 +1,4 @@
-// Inspiration to create dependcy injection came from this post: https://blog.drewolson.org/dependency-injection-in-go/
+// Inspiration to create dependency injection came from this post: https://blog.drewolson.org/dependency-injection-in-go/
 
 package containers
 
@@ -6,7 +6,6 @@ import (
 	"products/config"
 	controllers "products/controllers/v1"
 	"products/handlers"
-	"products/middleware"
 	"products/repositories"
 	"products/server"
 	"products/services"
@@ -36,14 +35,11 @@ func BuildContainer() *dig.Container {
 	err = container.Provide(services.NewKafkaConsumer)
 	if err != nil {panic(err)}
 
-
 	// controllers
 	err = container.Provide(controllers.NewProductController)
 	if err != nil {panic(err)}
 
 	// generic http layer
-	err = container.Provide(middleware.NewMiddleware)
-	if err != nil {panic(err)}
 	err = container.Provide(handlers.NewHttpHandlers)
 	if err != nil {panic(err)}
 
