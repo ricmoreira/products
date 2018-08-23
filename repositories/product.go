@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 	"products/models/request"
 	"products/models/response"
 
@@ -72,8 +71,15 @@ func (this *ProductRepository) List(req *mrequest.ListRequest) (int64, int64, in
 
 	args := []*bson.Element{}
 
-	for i, v := range req.Filters {
-		args = append(args, bson.EC.String(i, fmt.Sprintf("%v", v)))
+	for key, value := range req.Filters {
+		if key != "_id" { // filter by text fields
+			pattern := value.(string) 
+			elem := bson.EC.Regex(key, pattern, "i")
+			args = append(args, elem)
+		} else { // filter by _id
+			elem := bson.EC.String(key, value.(string))
+			args = append(args, elem)
+		}
 	}
 
 	total, e := this.products.Count(
