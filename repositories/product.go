@@ -16,14 +16,20 @@ type ProductRepository struct {
 	products MongoCollection
 }
 
+type ProductRepositoryContract interface {
+	CreateOne(request *mrequest.ProductCreate) (*mongo.InsertOneResult, error)
+	ReadOne(p *mrequest.ProductRead) (*mresponse.Product, error)
+	InsertMany(request *[]*mrequest.ProductCreate) (*mongo.InsertManyResult, error)
+	List(req *mrequest.ListRequest) (int64, int64, int64, mongo.Cursor, error)
+}
+
 // NewProductRepository is the constructor for ProductRepository
-func NewProductRepository(db *DBCollections) *ProductRepository {
+func NewProductRepository(db *DBCollections) ProductRepositoryContract {
 	return &ProductRepository{products: db.Product}
 }
 
 // CreateOne saves provided model instance to database
 func (this *ProductRepository) CreateOne(request *mrequest.ProductCreate) (*mongo.InsertOneResult, error) {
-
 	return this.products.InsertOne(context.Background(), request)
 }
 
@@ -45,16 +51,6 @@ func (this *ProductRepository) ReadOne(p *mrequest.ProductRead) (*mresponse.Prod
 	return &res, nil
 }
 
-// TODO: implement
-func (this *ProductRepository) UpdateOne(p *mrequest.ProductUpdate) (*mresponse.Product, error) {
-	return nil, nil
-}
-
-// TODO: implement
-func (this *ProductRepository) DeleteOne(p *mrequest.ProductDelete) (*mresponse.Product, error) {
-	return nil, nil
-}
-
 func (this *ProductRepository) InsertMany(request *[]*mrequest.ProductCreate) (*mongo.InsertManyResult, error) {
 	// transform to []interface{} (https://golang.org/doc/faq#convert_slice_of_interface)
 	s := make([]interface{}, len(*request))
@@ -67,6 +63,8 @@ func (this *ProductRepository) InsertMany(request *[]*mrequest.ProductCreate) (*
 	return this.products.InsertMany(context.Background(), s, opt)
 }
 
+// List will return a mongo.Cursor along with pagination utility values
+// total, perPage, page, cursor, error - these are the return values 
 func (this *ProductRepository) List(req *mrequest.ListRequest) (int64, int64, int64, mongo.Cursor, error) {
 
 	args := []*bson.Element{}

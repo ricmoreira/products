@@ -2,7 +2,7 @@ package services
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"products/models/request"
 	"products/models/response"
 	"products/repositories"
@@ -12,23 +12,20 @@ import (
 	"github.com/mongodb/mongo-go-driver/mongo"
 )
 
-// ProductServiceContract is the abstraction for service layer on roles resource
+// ProductServiceContract is the abstraction for service layer on products resource
 type ProductServiceContract interface {
-	CreateOne(*mrequest.ProductCreate) (*mresponse.ProductCreate, *mresponse.ErrorResponse)
-	ReadOne(*mrequest.ProductRead) (*mresponse.Product, *mresponse.ErrorResponse)
-	UpdateOne(*mrequest.ProductUpdate) (*mresponse.Product, *mresponse.ErrorResponse)
-	DeleteOne(*mrequest.ProductDelete) (*mresponse.Product, *mresponse.ErrorResponse)
-	CreateMany(*[]*mrequest.ProductCreate) (*[]*mresponse.ProductCreate, *mresponse.ErrorResponse)
+	CreateOne(request *mrequest.ProductCreate) (*mresponse.ProductCreate, *mresponse.ErrorResponse)
+	CreateMany(request *[]*mrequest.ProductCreate) (*[]*mresponse.ProductCreate, *mresponse.ErrorResponse)
 	List(request *mrequest.ListRequest) (*mresponse.ProductList, *mresponse.ErrorResponse)
 }
 
 // ProductService is the layer between http client and repository for product resource
 type ProductService struct {
-	productRepository *repositories.ProductRepository
+	productRepository repositories.ProductRepositoryContract
 }
 
 // NewProductService is the constructor of ProductService
-func NewProductService(pr *repositories.ProductRepository) *ProductService {
+func NewProductService(pr repositories.ProductRepositoryContract) ProductServiceContract {
 	return &ProductService{
 		productRepository: pr,
 	}
@@ -58,21 +55,6 @@ func (this *ProductService) CreateOne(request *mrequest.ProductCreate) (*mrespon
 	return &p, nil
 }
 
-// TODO: implement
-func (this *ProductService) ReadOne(p *mrequest.ProductRead) (*mresponse.Product, *mresponse.ErrorResponse) {
-	return nil, nil
-}
-
-// TODO: implement
-func (this *ProductService) UpdateOne(p *mrequest.ProductUpdate) (*mresponse.Product, *mresponse.ErrorResponse) {
-	return nil, nil
-}
-
-// TODO: implement
-func (this *ProductService) DeleteOne(p *mrequest.ProductDelete) (*mresponse.Product, *mresponse.ErrorResponse) {
-	return nil, nil
-}
-
 // CreateMany saves many products in one bulk operation
 func (this *ProductService) CreateMany(request *[]*mrequest.ProductCreate) (*[]*mresponse.ProductCreate, *mresponse.ErrorResponse) {
 
@@ -82,18 +64,22 @@ func (this *ProductService) CreateMany(request *[]*mrequest.ProductCreate) (*[]*
 		mngBulkError := err.(mongo.BulkWriteError)
 		writeErrors := mngBulkError.WriteErrors
 		for _, err := range writeErrors {
-			fmt.Println(err)
+			log.Println(err) // for now only print errors
 		}
 	}
 
-	result := make([]*mresponse.ProductCreate, len(res.InsertedIDs))
-	for i, insertedID := range res.InsertedIDs {
-		id := insertedID.(objectid.ObjectID)
-		result[i] = &mresponse.ProductCreate{
-			ID: id.Hex(),
+	var length int
+	result := make([]*mresponse.ProductCreate, length)
+	if res != nil {
+		length = len(res.InsertedIDs)
+		for _, insertedID := range res.InsertedIDs {
+			id := insertedID.(objectid.ObjectID)
+			result = append(result, &mresponse.ProductCreate{
+				ID: id.Hex(),
+			})
 		}
 	}
-
+	
 	return &result, nil
 }
 
@@ -111,7 +97,8 @@ func (this *ProductService) List(request *mrequest.ListRequest) (*mresponse.Prod
 
 	for cursor.Next(context.Background()) {
 		doc := mresponse.ProductRead{}
-		if err := cursor.Decode(&doc); err != nil {
+		err := cursor.Decode(&doc)
+		if err != nil {
 			errR := errors.HandleErrorResponse(errors.SERVICE_UNAVAILABLE, nil, err.Error())
 			return nil, errR
 		}

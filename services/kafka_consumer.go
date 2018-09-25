@@ -11,10 +11,10 @@ import (
 
 type KafkaConsumer struct {
 	config      *config.Config
-	productServ *ProductService
+	productServ ProductServiceContract
 }
 
-func NewKafkaConsumer(config *config.Config, ps *ProductService) *KafkaConsumer {
+func NewKafkaConsumer(config *config.Config, ps ProductServiceContract) *KafkaConsumer {
 	return &KafkaConsumer{
 		config:      config,
 		productServ: ps,

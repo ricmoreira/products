@@ -20,18 +20,6 @@
   version = "v0.11.4"
 
 [[projects]]
-  name = "github.com/dgrijalva/jwt-go"
-  packages = ["."]
-  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
-  version = "v3.2.0"
-
-[[projects]]
-  name = "github.com/gin-contrib/cors"
-  packages = ["."]
-  revision = "cf4846e6a636a76237a28d9286f163c132e841bc"
-  version = "v1.2"
-
-[[projects]]
   branch = "master"
   name = "github.com/gin-contrib/sse"
   packages = ["."]
@@ -176,15 +164,6 @@
   version = "v8.18.2"
 
 [[projects]]
-  branch = "v2"
-  name = "gopkg.in/mgo.v2"
-  packages = [
-    "bson",
-    "internal/json"
-  ]
-  revision = "9856a29383ce1c59f308dd1cf0363a79b5bef6b5"
-
-[[projects]]
   name = "gopkg.in/yaml.v2"
   packages = ["."]
   revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
@@ -193,6 +172,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e7624cb1a93817229c7d151c48ce9be22ed00c05b56d5de7e5594ad89be71fc0"
+  inputs-digest = "407b7cdbbb13812f3d2cd19a3b64e3511fde56c1240712cddd4f41e50eca482c"
   solver-name = "gps-cdcl"
   solver-version = 1

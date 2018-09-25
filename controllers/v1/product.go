@@ -17,7 +17,7 @@ type (
 )
 
 // NewProductController is the constructor of ProductController
-func NewProductController(ps *services.ProductService) *ProductController {
+func NewProductController(ps services.ProductServiceContract) *ProductController {
 	return &ProductController{
 		ProductService: ps,
 	}
