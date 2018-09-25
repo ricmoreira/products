@@ -8,8 +8,8 @@ import (
 type ListRequest struct {
 	PerPage int                    `json:"per_page" valid:"required"`
 	Page    int                    `json:"page" valid:"required"`
-	Sort    string                 `json:"sort" valid:"required in(id|_id)"`
-	Order   string                 `json:"order" valid:"required in(normal|reverse)"`
+	Sort    string                 `json:"sort" valid:"required,in(id|_id)"`
+	Order   string                 `json:"order" valid:"required,in(normal|reverse)"`
 	Filters map[string]interface{} `json:"filters" valid:""`
 }
 
